@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -30,5 +31,33 @@ class UserController extends Controller
         //Save user into database
         $user->save();
         return redirect()->route('product.index');
+    }
+
+//    Signin logic
+    public function  getSignin()
+    {
+        return view('user.signin');
+    }
+
+    public function  postSignin(Request $request)
+    {
+        //Validation field
+        $this ->validate($request, [
+            'email'   =>'email|required',
+            'password'=>'required|min:4'
+        ]);
+        // Laravel Authetification
+       if( Auth::attempt(['email' => $request->input('email'), 'password'=>$request->input('password')]))
+        {
+            // Successfully ->return profile
+            return redirect()->route('user.profile');
+        }
+        return redirect()->back();
+    }
+    //User Profile
+
+    public function getProfile()
+    {
+        return view('user.profile');
     }
 }
