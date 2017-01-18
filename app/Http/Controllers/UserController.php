@@ -20,7 +20,7 @@ class UserController extends Controller
     {
         //Validation field
         $this ->validate($request, [
-            'email'   =>'email|required|unique:user',
+            'email'   =>'email|required|unique:users',
             'password'=>'required|min:4'
         ]);
 
@@ -30,7 +30,9 @@ class UserController extends Controller
         ]);
         //Save user into database
         $user->save();
-        return redirect()->route('product.index');
+        Auth::login($user);
+        //return redirect()->route('product.index');
+        return redirect()->route('user.profile');
     }
 
 //    Signin logic
