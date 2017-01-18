@@ -60,4 +60,11 @@ class UserController extends Controller
     {
         return view('user.profile');
     }
+
+    //User log out
+    public function getLogout()
+    {
+        Auth::logout();
+        return redirect()->back();
+    }
 }
