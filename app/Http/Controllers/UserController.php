@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
+use  Session;
+
 
 class UserController extends Controller
 {
@@ -31,6 +33,13 @@ class UserController extends Controller
         //Save user into database
         $user->save();
         Auth::login($user);
+
+        //Check if my session has oldurl
+        if(Session::has('oldUrl')){
+            $oldUrl =Session::get('oldUrl');
+            Session::forget('oldUrl');
+            return redirect()->to($oldUrl);
+        }
         //return redirect()->route('product.index');
         return redirect()->route('user.profile');
     }
@@ -51,6 +60,12 @@ class UserController extends Controller
         // Laravel Authetification
        if( Auth::attempt(['email' => $request->input('email'), 'password'=>$request->input('password')]))
         {
+            //Check if my session has oldurl
+            if(Session::has('oldUrl')){
+                $oldUrl =Session::get('oldUrl');
+                Session::forget('oldUrl');
+                return redirect()->to($oldUrl);
+            }
             // Successfully ->return profile
             return redirect()->route('user.profile');
         }
@@ -67,6 +82,7 @@ class UserController extends Controller
     public function getLogout()
     {
         Auth::logout();
-        return redirect()->back();
+        return redirect()->route('user.signin');
+        //return redirect()->back();
     }
 }
