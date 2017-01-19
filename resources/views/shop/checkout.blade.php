@@ -62,9 +62,10 @@
                 </div>
 
                 </div>
-                {{ csrf_field() }}
+
 
                 <button type="submit" class="btn btn-success">Buy Now</button>
+                {{ csrf_field() }}
             </form>
         </div>
     </div>
